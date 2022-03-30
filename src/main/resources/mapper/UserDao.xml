@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.imagin.blast.modules.user.dao.UserDao">
+
+    <resultMap type="vip.imagin.blast.modules.user.entity.User" id="UserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="delflag" column="delflag" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+        <result property="gender" column="gender" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into explosive.user(username, password, nickname, avatar, status, delflag, createtime, updatetime, gender)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.username}, #{entity.password}, #{entity.nickname}, #{entity.avatar}, #{entity.status}, #{entity.delflag}, #{entity.createtime}, #{entity.updatetime}, #{entity.gender})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into explosive.user(username, password, nickname, avatar, status, delflag, createtime, updatetime, gender)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.nickname}, #{entity.avatar}, #{entity.status}, #{entity.delflag}, #{entity.createtime}, #{entity.updatetime}, #{entity.gender})
+        </foreach>
+        on duplicate key update
+         username = values(username) , password = values(password) , nickname = values(nickname) , avatar = values(avatar) , status = values(status) , delflag = values(delflag) , createtime = values(createtime) , updatetime = values(updatetime) , gender = values(gender)     </insert>
+
+</mapper>
+
