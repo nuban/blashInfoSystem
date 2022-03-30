@@ -4,7 +4,7 @@ package vip.imagin.blast.filter;/**
  * @apiNote
  */
 
-import vip.imagin.blast.entity.LoginUser;
+import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import vip.imagin.blast.utils.JwtUtil;
 import vip.imagin.blast.utils.RedisCache;
 import io.jsonwebtoken.Claims;
@@ -54,15 +54,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         //从redis获取用户信息
         String redisKey = "login:" + userId;
-        LoginUser loginUser = redisCache.getCacheObject(redisKey);
-        if (Objects.isNull(loginUser)) {
+        MyUserDetails myUserDetails = redisCache.getCacheObject(redisKey);
+        if (Objects.isNull(myUserDetails)) {
             throw new RuntimeException("用户未登录");
         }
 
         //存入SecurityContextHolder
         //TODO 获取权限信息
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+                new UsernamePasswordAuthenticationToken(myUserDetails, null, myUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //放行
         filterChain.doFilter(request, response);

@@ -14,5 +14,7 @@ import vip.imagin.blast.utils.Result;
 public interface UserService extends IService<User> {
 
     Result login(LoginUser loginUser);
+
+    Result logout();
 }
 

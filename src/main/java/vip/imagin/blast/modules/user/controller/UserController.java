@@ -4,6 +4,10 @@ package vip.imagin.blast.modules.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import vip.imagin.blast.dto.LoginUser;
 import vip.imagin.blast.modules.user.entity.User;
 import vip.imagin.blast.modules.user.service.UserService;
@@ -18,6 +22,7 @@ import javax.annotation.Resource;
  * @author makejava
  * @since 2022-03-30 16:16:24
  */
+@Api(tags="用户各种操作的接口")
 @RestController
 @RequestMapping("user")
 public class UserController{
@@ -45,10 +50,21 @@ public class UserController{
      * @return
      */
     @PostMapping("login")
-    public Result login(LoginUser loginUser){
+    @ApiOperation("登录的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "user的userName和password",value = "userName--用户名" +
+                    "password -- 密码",
+                    required = true,paramType = "query" /*表示参数放在扫描地方*/)
+    })
+    public Result login(@RequestBody LoginUser  loginUser){
         return userService.login(loginUser);
     }
 
+    @ApiOperation("注销的接口")
+    @GetMapping("logout")
+    public Result logout(){
+        return userService.logout();
+    }
 
 }
 

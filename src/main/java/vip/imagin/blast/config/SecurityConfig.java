@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationEntryPointImpl authenticationEntryPoint;
 
-    //注入BCryptPasswordEncoder
+    //注入BCryptPasswordEncoder,用于数据库密码加密
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

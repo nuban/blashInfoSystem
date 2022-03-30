@@ -1,43 +1,42 @@
-package vip.imagin.blast.service.impl;/**
+package vip.imagin.blast.modules.user.service;/**
  * @author lingqu
  * @date 2022/3/1
  * @apiNote
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import vip.imagin.blast.entity.LoginUser;
-import vip.imagin.blast.entity.User;
-import vip.imagin.blast.mapper.MenuMapper;
-import vip.imagin.blast.mapper.UserMapper;
+import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import vip.imagin.blast.modules.user.dao.MenuDao;
+import vip.imagin.blast.modules.user.dao.UserDao;
+import vip.imagin.blast.modules.user.entity.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * @author zzhi
- * @version 1.0
- * @description TODO
- * @createDate 2022/3/1
+ * 登录实现去数据库里面查询数据（替换原本的springsecurity方法）
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    private UserMapper userManager;
+    private UserDao userManager;
 
     @Autowired
-    private MenuMapper menuManager;
+    private MenuDao menuManager;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         //查询用户信息
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName, username);
+        queryWrapper.eq(User::getUsername, username);
         User user = userManager.selectOne(queryWrapper);
 
 
@@ -46,8 +45,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         //TODO 权限查询
-        List<String> list = menuManager.selectPermsByUserId(user.getId());
+        List<String> list = new ArrayList<>(Arrays.asList("*:*"));
+
+//        List<String> list = menuManager.selectPermsByUserId(user.getId());
         //封装为UserDetails
-        return new LoginUser(user, list);
+
+        return new MyUserDetails(user,list);
     }
 }

@@ -1,10 +1,11 @@
-package vip.imagin.blast.entity;/**
+package vip.imagin.blast.modules.user.entity;/**
  * @author lingqu
  * @date 2022/3/1
  * @apiNote
  */
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,12 +24,12 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
-public class LoginUser implements UserDetails {
+@AllArgsConstructor
+public class MyUserDetails implements UserDetails {
     private User user;
     private List<String> permissions;
 
-    public LoginUser(User user, List<String> permissions) {
+    public MyUserDetails(User user, List<String> permissions) {
         this.user = user;
         this.permissions = permissions;
     }
@@ -61,7 +62,7 @@ public class LoginUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return user.getUsername();
     }
 
     @Override

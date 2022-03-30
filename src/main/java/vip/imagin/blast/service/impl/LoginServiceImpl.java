@@ -5,7 +5,7 @@ package vip.imagin.blast.service.impl;/**
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import vip.imagin.blast.entity.LoginUser;
+import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import vip.imagin.blast.entity.User;
 import vip.imagin.blast.mapper.UserMapper;
 import vip.imagin.blast.service.LoginService;
@@ -56,14 +56,14 @@ public class LoginServiceImpl implements LoginService {
         }
 
         //如果登录成功 生成jwt
-        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        String userId = loginUser.getUser().getId().toString();
+        MyUserDetails myUserDetails = (MyUserDetails) authenticate.getPrincipal();
+        String userId = myUserDetails.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userId);
         Map<String, String> map = new HashMap<String, String>();
         map.put("token", jwt);
 
         //把完整用户信息保存到redis
-        redisCache.setCacheObject("login:" + userId, loginUser, 1, TimeUnit.HOURS);
+        redisCache.setCacheObject("login:" + userId, myUserDetails, 1, TimeUnit.HOURS);
 
         return new Result(200, "登录成功", map);
     }
@@ -72,7 +72,7 @@ public class LoginServiceImpl implements LoginService {
     public Result logout() {
         //从SecurityContextHolder获取id
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser principal = (LoginUser) authentication.getPrincipal();
+        MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
         Long id = principal.getUser().getId();
 
         //把redis中的登录信息删除
@@ -98,7 +98,7 @@ public class LoginServiceImpl implements LoginService {
 
         //得到执行人的id(如果可以每个人注册则不需要这个，并且取消注册接口的拦截)
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser principal = (LoginUser) authentication.getPrincipal();
+        MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
         Long id = principal.getUser().getId();
         user.setCreateBy(id);
         userManager.insert(user);
