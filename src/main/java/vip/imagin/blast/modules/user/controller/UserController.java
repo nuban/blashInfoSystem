@@ -18,18 +18,6 @@ import vip.imagin.blast.utils.Result;
 
 import javax.annotation.Resource;
 import java.sql.ResultSet;
-/**
- * sdfnjskldnfsjkdnf.,sjdfjksdjkfs
- * asdfsdfsd
- */
-
-/**
- * 改了一点点的地方
- * asdasdasdas
- */
-/**
- * adasd
- */
 
 /**
  * (User)表控制层
