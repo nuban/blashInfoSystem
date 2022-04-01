@@ -3,14 +3,17 @@ server:
 
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-#    druid:
-#      validation-query: select 1
-#    dbcp2:
+  #解决控制台的druid问题 :testWhileIdle is true, validationQuery not set
+    druid:
+      validation-query: select 1
+    dbcp2:
+
+
 
   #    redis配置
   redis:

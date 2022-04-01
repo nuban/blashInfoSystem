@@ -46,10 +46,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户名或者密码错误");
         }
 
-        //TODO 权限查询
-        List<String> list = new ArrayList<>(Arrays.asList("*:*"));
 
-//        List<String> list = menuManager.selectPermsByUserId(user.getId());
+        //List<String> list = new ArrayList<>(Arrays.asList("*:*"));
+
+        //从数据库获取到用户的权限
+        List<String> list = menuManager.selectPermsByUserId(user.getId());
         //封装为UserDetails
 
         return new MyUserDetails(user,list);

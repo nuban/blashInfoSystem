@@ -2,6 +2,7 @@ package vip.imagin.blast.modules.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import vip.imagin.blast.dto.LoginUser;
+import vip.imagin.blast.dto.SignUser;
 import vip.imagin.blast.modules.user.entity.User;
 import vip.imagin.blast.utils.Result;
 
@@ -13,8 +14,27 @@ import vip.imagin.blast.utils.Result;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     * 登录
+     * @param loginUser
+     * @return result
+     */
     Result login(LoginUser loginUser);
 
+    /**
+     * 注销
+     * @return result
+     */
     Result logout();
+
+    /**
+     * 注册
+     * @param signUser 自己封装的dto
+     * @return result
+     */
+    Result signIn(SignUser signUser);
+
+    Result getCaptch();
+
 }
 

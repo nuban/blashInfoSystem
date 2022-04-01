@@ -30,12 +30,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     *     jwt的过滤器替换原来的那个页面
+     */
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
+    //成功处理器
     @Autowired
     private AccessDeniedHandlerImpl accessDeniedHandler;
 
+    //失败处理器
     @Autowired
     private AuthenticationEntryPointImpl authenticationEntryPoint;
 
@@ -67,6 +72,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers("/hello").permitAll()
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/user/login").anonymous()
+                // 对于注册接口 允许匿名访问
+                .antMatchers("/user/signin").anonymous()
+                // 对于获取验证码接口 允许匿名访问
+                .antMatchers("/user/captch").anonymous()
 //                .antMatchers("/user/**").anonymous()
                 .antMatchers("/test/**").anonymous()
                 .antMatchers("/swagger-ui/**").anonymous()

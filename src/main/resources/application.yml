@@ -12,3 +12,18 @@ mybatis-plus:
       id-type: auto
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
+
+
+
+
+
+
+#一些常用的配置，代码中需要读取
+jwt:
+  timeOut: 超时时间100
+
+
+

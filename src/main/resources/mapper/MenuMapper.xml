@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.imagin.blast.modules.user.dao.MenuDao">
+    <!--使用insert update delete select标签来写sql-->
+<!--    <select id="selectPermsByUserId" resultType="java.lang.String">-->
+<!--  SELECT-->
+<!--			DISTINCT m.`permission`-->
+<!--	FROM-->
+<!--			role_user ur-->
+<!--			LEFT JOIN `role` r ON ur.`userid` = r.`id`-->
+<!--			LEFT JOIN `role_menu` rm ON ur.`roleid` = rm.`roleid`-->
+<!--			LEFT JOIN `menu` m ON m.`id` = rm.`menuid`-->
+<!--		WHERE-->
+<!--			userid = 1-->
+<!--			AND r.`status` = 0-->
+<!--			AND m.`status` = 0-->
+<!--    </select>-->
+</mapper>

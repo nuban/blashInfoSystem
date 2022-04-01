@@ -3,11 +3,13 @@ package vip.imagin.blast.dto;
 import lombok.Data;
 
 /**
- * 登录的dto类
+ * 注册dto
  */
 @Data
-public class LoginUser {
+public class SignUser {
     private String userName;
     private String password;
+    //注册码
+    private String signCode;
     private String sureCode;
 }

@@ -24,6 +24,9 @@ import java.io.IOException;
  * @createDate 2022/3/6
  */
 
+/**
+ * 授权失败
+ */
 @Component
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override

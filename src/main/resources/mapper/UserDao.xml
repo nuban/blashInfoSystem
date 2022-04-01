@@ -33,5 +33,7 @@
         on duplicate key update
          username = values(username) , password = values(password) , nickname = values(nickname) , avatar = values(avatar) , status = values(status) , delflag = values(delflag) , createtime = values(createtime) , updatetime = values(updatetime) , gender = values(gender)     </insert>
 
+
+
 </mapper>
 
