@@ -13,6 +13,7 @@ import vip.imagin.blast.modules.user.entity.User;
  * @since 2022-03-30 16:16:24
  */
 @Mapper
+@Repository
 public interface UserDao extends BaseMapper<User> {
 
 

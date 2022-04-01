@@ -5,6 +5,7 @@ package vip.imagin.blast.modules.user.service;/**
  */
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,9 +36,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         //查询用户信息
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUsername, username);
-        User user = userManager.selectOne(queryWrapper);
+         QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",username);
+
+        User user = userManager.selectOne(wrapper);
 
 
         if (Objects.isNull(user)) {

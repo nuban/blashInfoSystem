@@ -1,6 +1,7 @@
 package vip.imagin.blast.modules.user.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = -40356785423868312L;
     //用户id
+    @TableId
     private Long id;
     
     private String username;

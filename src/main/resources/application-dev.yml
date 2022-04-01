@@ -8,6 +8,9 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+#    druid:
+#      validation-query: select 1
+#    dbcp2:
 
   #    redis配置
   redis:

@@ -33,8 +33,10 @@ public class JwtUtil {
      * @return
      */
     public static String createJWT(String subject) {
+
         JwtBuilder builder = getJwtBuilder(subject, null, getUUID());// 设置过期时间
-        return builder.compact();
+        String s = builder.compact();
+        return s;
     }
 
     /**

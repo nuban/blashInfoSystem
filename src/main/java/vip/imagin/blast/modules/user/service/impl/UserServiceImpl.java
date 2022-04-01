@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import vip.imagin.blast.dto.LoginUser;
-import vip.imagin.blast.mapper.UserMapper;
 import vip.imagin.blast.modules.user.dao.UserDao;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import vip.imagin.blast.modules.user.entity.User;
@@ -47,17 +47,26 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
         //使用Authentication authenticate认证
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword());
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        Authentication authenticate = null;
+        try {
+            authenticate = authenticationManager.authenticate(authenticationToken);
+        } catch (AuthenticationException e) {
+            return  new Result(500,"登录失败") ;
 
-        //登录失败，给出相应提示
-        if (Objects.isNull(authenticate)) {
-            throw new RuntimeException("登录失败");
         }
+
+//        //登录失败，给出相应提示
+//        if (Objects.isNull(authenticate)) {
+//        }
 
         //如果登录成功 生成jwt
         MyUserDetails myUserDetails = (MyUserDetails) authenticate.getPrincipal();
+        //验证账号是否正常
+        if("0".equals(myUserDetails.getUser().getStatus())){
+            return new Result(500,"账号状态异常");
+        }
         String userId = myUserDetails.getUser().getId().toString();
-        String jwt = JwtUtil.createJWT(userId);
+        String jwt = JwtUtil.createJWT("1");
         Map<String, String> map = new HashMap<String, String>();
         map.put("token", jwt);
 

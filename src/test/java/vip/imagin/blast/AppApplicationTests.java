@@ -1,8 +1,11 @@
 package vip.imagin.blast;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import vip.imagin.blast.modules.user.dao.UserDao;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
-import vip.imagin.blast.mapper.MenuMapper;
-import vip.imagin.blast.mapper.UserMapper;
+
+import vip.imagin.blast.modules.user.entity.User;
+import vip.imagin.blast.utils.JwtUtil;
 import vip.imagin.blast.utils.RedisCache;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,14 @@ import java.util.List;
 class AppApplicationTests {
 
     @Autowired
-    UserMapper userMapper;
+    UserDao userMapper;
+
+    @Test
+    public void test(){
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username","zs");
+        System.out.println(userMapper.selectOne(userQueryWrapper));
+    }
 
     @Autowired
     RedisCache redisCache;
@@ -42,14 +52,20 @@ class AppApplicationTests {
 //                "$2a$10$UViL.jTzZHy/m7K29SuwPenDT5s5XcfIoSHoEJImRBjbsnok3Y7Nu"));
     }
 
-    @Autowired
-    private MenuMapper menuMapper;
+//    @Autowired
+//    private MenuMapper menuMapper;
+//    @Test
+//    public void testSelectPermsByUserId(){
+//        List<String> list = menuMapper.selectPermsByUserId(2L);
+//        for (String userId : list){
+//            System.out.println(userId);
+//        }
+//    }
+
     @Test
-    public void testSelectPermsByUserId(){
-        List<String> list = menuMapper.selectPermsByUserId(2L);
-        for (String userId : list){
-            System.out.println(userId);
-        }
+    public void testjwt(){
+        String jwt = JwtUtil.createJWT("1");
+        System.out.println(jwt);
     }
 
 }

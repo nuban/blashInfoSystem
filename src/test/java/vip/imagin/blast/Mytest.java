@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import vip.imagin.blast.modules.user.dao.UserDao;
 import vip.imagin.blast.modules.user.entity.User;
 
+import java.util.List;
+
 @SpringBootTest
 public class Mytest {
 
@@ -21,6 +23,9 @@ public class Mytest {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, "zs");
         User user = userManager.selectOne(queryWrapper);
+        System.out.println(user.toString());
+//        List<User> users = userManager.selectList(null);
+//        System.out.println(users);
     }
 
 }
