@@ -20,10 +20,6 @@ import javax.annotation.Resource;
 import java.sql.ResultSet;
 
 /**
- * 改了一点点的地方
- */
-
-/**
  * (User)表控制层
  *
  * @author makejava
@@ -57,7 +53,7 @@ public class UserController{
      * 登录接口
      * @param loginUser 这是一个dto是一个入参对象
      * @return
-     */ 
+     */
     @PostMapping("login")
     @ApiOperation("登录的接口")
     @ApiImplicitParams({
