@@ -10,4 +10,6 @@ public class LoginUser {
     private String userName;
     private String password;
     private String sureCode;
+    //获取验证码
+    private String   verifyKey;
 }

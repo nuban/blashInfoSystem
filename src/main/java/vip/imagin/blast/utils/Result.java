@@ -22,6 +22,15 @@ public class Result<T> {
         this.code = code;
         this.msg = msg;
     }
+    public Result(Status status) {
+        this.code = status.getCode();
+        this.msg = status.getMsg();
+    }
+    public Result(Status status,T data) {
+        this.code = status.getCode();
+        this.msg = status.getMsg();
+        this.data = data;
+    }
 
     public Result(Integer code, T data) {
         this.code = code;

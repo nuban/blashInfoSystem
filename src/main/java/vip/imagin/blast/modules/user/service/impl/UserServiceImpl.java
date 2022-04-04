@@ -21,10 +21,7 @@ import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import vip.imagin.blast.modules.user.entity.User;
 import vip.imagin.blast.modules.user.service.UserService;
 import org.springframework.stereotype.Service;
-import vip.imagin.blast.utils.Base64;
-import vip.imagin.blast.utils.JwtUtil;
-import vip.imagin.blast.utils.RedisCache;
-import vip.imagin.blast.utils.Result;
+import vip.imagin.blast.utils.*;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -68,7 +65,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
      */
     @Override
     public Result login(LoginUser loginUser) {
-        //TODO 验证码的校验
+        if( null==loginUser.getSureCode() ||"".equals(loginUser.getSureCode())  ){
+            return new Result(400,"请输入验证码");
+//            return new Result(Status.CODE_FAILURE);
+        }
+        String code = redisCache.getCacheObject(loginUser.getVerifyKey());
+        if(!code.equals(loginUser.getSureCode())){
+            return new Result(Status.CODE_FAILURE);
+        }
 
         //使用Authentication authenticate认证
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword());
@@ -151,7 +155,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         //生成随机的键
         UUID uuid =UUID.randomUUID();
         String sUuid = uuid.toString();
-        String varify = sUuid+"codeimg_";
+        String varify = "codeimg_"+sUuid;
         //图片
         String base64img = Base64.encode(os.toByteArray());
         CaptchImg captchImg = new CaptchImg(varify, base64img);
