@@ -5,6 +5,7 @@ import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,6 +45,14 @@ import java.util.concurrent.TimeUnit;
 public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService {
 
     /**
+     * 从配置文件中读取数据
+     */
+    @Value("${jwt.jwtTimeOut}")
+    private Integer TimeOut;
+    @Value("${jwt.codeTimeOut}")
+    private Integer codeTimeOut;
+
+    /**
      *     获取验证码
      */
     @Resource(name = "captchaProducerMath")
@@ -70,7 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 //            return new Result(Status.CODE_FAILURE);
         }
         String code = redisCache.getCacheObject(loginUser.getVerifyKey());
-        if(!code.equals(loginUser.getSureCode())){
+        if(null == code || !code.equals(loginUser.getSureCode())){
             return new Result(Status.CODE_FAILURE);
         }
 
@@ -91,12 +100,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             return new Result(500,"账号状态异常");
         }
         String userId = myUserDetails.getUser().getId().toString();
-        String jwt = JwtUtil.createJWT(userId/*timeOut*/);
+        String jwt = JwtUtil.createJWT(userId);
         Map<String, String> map = new HashMap<String, String>();
         map.put("token", jwt);
 
         //把完整用户信息保存到redis
-        redisCache.setCacheObject("login:" + userId, myUserDetails, 1, TimeUnit.HOURS);
+        redisCache.setCacheObject("login:" + userId, myUserDetails, TimeOut, TimeUnit.HOURS);
 
         return new Result(200, "登录成功", map);
     }
@@ -117,7 +126,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     //注册
     @Override
     public Result signIn(SignUser signUser) {
-        //TODO 验证码的校验
+        //TODO 邀请码的校验
+
         //遇到重名
         User user = userdao.findbyName(signUser.getUserName());
         if(user != null){
@@ -129,7 +139,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         //没重名
         int insert = userdao.insert(new User(signUser.getUserName(), passwordEncoder,signUser.getSignCode()));
         if(insert != 0){
-          return new Result(200,"注册成功，等待管理员审核。");
+          return new Result(200,"注册成功");
         }
         return new Result(500,"注册失败，联系管理员。");
     }
@@ -160,7 +170,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         String base64img = Base64.encode(os.toByteArray());
         CaptchImg captchImg = new CaptchImg(varify, base64img);
         //存入redis 3分钟过期
-        redisCache.setCacheObject(varify,code,3, TimeUnit.MINUTES);
+        redisCache.setCacheObject(varify,code,codeTimeOut, TimeUnit.MINUTES);
         Result result = new Result(200, "验证码响应成功", captchImg);
         return result;
     }

@@ -11,5 +11,6 @@ public class SignUser {
     private String password;
     //注册码
     private String signCode;
-    private String sureCode;
+    //注册就不用验证码了
+//    private String sureCode;
 }

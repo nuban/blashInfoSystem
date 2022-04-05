@@ -13,6 +13,12 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+logging:
+  level:
+    root: info
+    vip.imagin.blast: debug
+  file:
+    name: logs/blog-dev.log
 
 
 
@@ -22,8 +28,11 @@ mybatis-plus:
 
 
 #一些常用的配置，代码中需要读取
+# 验证码过期时间和jwt过期时间
 jwt:
-  timeOut: 超时时间100
+  codeTimeOut: 5  #分钟
+  jwtTimeOut: 24  #小时
+
 
 
 

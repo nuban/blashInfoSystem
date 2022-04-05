@@ -57,8 +57,8 @@ public class UserController{
     @PostMapping("login")
     @ApiOperation("登录的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "user的userName和password，sureCode",value = "userName--用户名" +
-                    "password -- 密码 sureCode-----验证码",
+            @ApiImplicitParam(name = "user的userName和password，sureCode，verifyKey",value = "userName--用户名" +
+                    "password -- 密码 sureCode-----验证码 verifyKey------和验证码一起返回 " ,
                     required = true,paramType = "query" /*表示参数放在扫描地方*/)
     })
     public Result login(@RequestBody LoginUser  loginUser){

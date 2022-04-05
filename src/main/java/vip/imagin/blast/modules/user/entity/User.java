@@ -41,8 +41,10 @@ public class User implements Serializable {
     private Date updatetime;
     //性别
     private String gender;
-    //注册的理由
+    //注册的注册码
     private String signcode;
+    //用户的类型 "1"表示管理员 “0”表示普通用户
+    private String usertype;
 
     public User(String username, String password,String signcode) {
         this.username = username;

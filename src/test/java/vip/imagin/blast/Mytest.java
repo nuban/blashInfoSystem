@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 //@PropertySource(value =  "classpath:config/readme.properties")
 public class Mytest {
 
-    @Value("${jwt.timeOut}")
+    @Value("${jwt.jwtTimeOut}")
     private String TimeOut;
 
     @Autowired
