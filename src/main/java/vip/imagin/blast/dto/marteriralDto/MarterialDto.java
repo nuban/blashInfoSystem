@@ -16,8 +16,7 @@ import java.util.Date;
  * @since 2022-03-30 16:52:21
  */
 @Data
-public class MarterialDto implements Serializable{
-    private static final long serialVersionUID = -40356785423868312L;
+public class MarterialDto {
     //材料id
     private Long id;
     //上传时间
