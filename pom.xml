@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.wx</groupId>
-    <artifactId>app</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>explosive</artifactId>
+    <version>1</version>
     <name>app</name>
     <description>Demo project for Spring Boot</description>
     <properties>

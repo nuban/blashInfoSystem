@@ -27,7 +27,8 @@ spring:
     password:
     # redis连接超时时间（单位毫秒）
     timeout: 1000
-    # redis连接池配置
+    # redis连接池配置1
+
 
     jedis:
       pool:
