@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @Configuration
-//开启事物   测试
+//开启事物   测试11
 @EnableTransactionManagement
 public class mybatisplusConfig {
     /**
