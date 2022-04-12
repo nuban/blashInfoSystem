@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.FastByteArrayOutputStream;
@@ -51,6 +52,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     private Integer TimeOut;
     @Value("${jwt.codeTimeOut}")
     private Integer codeTimeOut;
+    @Value("${code.switch}")
+    private boolean codeSwitch;
 
     /**
      *     获取验证码
@@ -74,14 +77,18 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
      */
     @Override
     public Result login(LoginUser loginUser) {
-        if( null==loginUser.getSureCode() ||"".equals(loginUser.getSureCode())  ){
-            return new Result(400,"请输入验证码");
-//            return new Result(Status.CODE_FAILURE);
+
+        //检测验证码
+        if(codeSwitch){
+            if( null==loginUser.getSureCode() ||"".equals(loginUser.getSureCode())  ){
+                return new Result(Status.CODE_EMPTY);
+            }
+            String code = redisCache.getCacheObject(loginUser.getVerifyKey());
+            if(null == code || !code.equals(loginUser.getSureCode())){
+                return new Result(Status.CODE_FAILURE);
+            }
         }
-        String code = redisCache.getCacheObject(loginUser.getVerifyKey());
-        if(null == code || !code.equals(loginUser.getSureCode())){
-            return new Result(Status.CODE_FAILURE);
-        }
+
 
         //使用Authentication authenticate认证
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword());
@@ -107,13 +114,15 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         //把完整用户信息保存到redis
         redisCache.setCacheObject("login:" + userId, myUserDetails, TimeOut, TimeUnit.HOURS);
 
+        //  MyUserDetails cacheObject = redisCache.getCacheObject("login:1");
+
         return new Result(200, "登录成功", map);
     }
 
 
     @Override
     public Result logout() {
-        //从SecurityContextHolder获取id(可能获取不到)
+        //从SecurityContextHolder获取id(不可能获取不到)
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
         Long id = principal.getUser().getId();

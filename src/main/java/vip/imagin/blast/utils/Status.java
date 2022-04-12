@@ -54,20 +54,6 @@ public enum Status {
      */
     FAILURE_UPLOAD_IMG(500,"图片上传失败"),
 
-    /**
-     * 操作失败，人数已满!!!"
-     */
-    NUMBER_OF_FULL(500,"操作失败,人数已满!!!"),
-
-    /**
-     * 登录失败，学号或者密码错误
-     */
-    FAILURE_TO_LOGIN(500,"登录失败，学号或者密码错误"),
-
-    /**
-     * 当前人数过多，请重试!
-     */
-    FAILURE_TO_ORDER(500,"当前人数过多，请重试!"),
 
     /**
      * 旧密码错误，修改密码失败
@@ -111,7 +97,9 @@ public enum Status {
     /**
      * token过期,请重新登录
      */
-    FAILED_AUTHORIZED(500,"授权失败");
+    FAILED_AUTHORIZED(500,"授权失败"),
+
+    CODE_EMPTY(400,"请输入验证码");
 
     private Integer code;
     private String msg;

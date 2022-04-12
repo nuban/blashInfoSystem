@@ -18,11 +18,10 @@ import java.io.Serializable;
 @TableName("caseman")
 public class Caseman  implements Serializable {
 
-    private static final long serialVersionUID = -40356785423868312L;
-    //涉爆人员id
+    //涉爆人员身份证
     @TableId
-    private Long id;
-
+    private Long casemanid;
+    //涉爆人员姓名
     private String name;
     //涉爆人的电话
     private String phonenumber;

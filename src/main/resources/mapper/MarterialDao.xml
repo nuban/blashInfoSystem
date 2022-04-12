@@ -5,7 +5,6 @@
     <resultMap type="vip.imagin.blast.modules.meterial.entity.Marterial" id="MarterialMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="date" column="date" jdbcType="TIMESTAMP"/>
-        <result property="time" column="time" jdbcType="VARCHAR"/>
         <result property="place" column="place" jdbcType="VARCHAR"/>
         <result property="reporter" column="reporter" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
@@ -14,8 +13,6 @@
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="examined" column="examined" jdbcType="INTEGER"/>
         <result property="picture" column="picture" jdbcType="VARCHAR"/>
-        <result property="caseman" column="caseman" jdbcType="VARCHAR"/>
-        <result property="caseenterprice" column="caseenterprice" jdbcType="VARCHAR"/>
         <result property="caseenterprceId" column="caseenterprce_id" jdbcType="INTEGER"/>
         <result property="casemanId" column="caseman_id" jdbcType="INTEGER"/>
     </resultMap>
@@ -37,6 +34,7 @@
         </foreach>
         on duplicate key update
          date = values(date) , time = values(time) , place = values(place) , reporter = values(reporter) , description = values(description) , main_explosive = values(main_explosive) , sub_explosive = values(sub_explosive) , user_id = values(user_id) , examined = values(examined) , picture = values(picture) , caseman = values(caseman) , caseenterprice = values(caseenterprice) , caseenterprce_id = values(caseenterprce_id) , caseman_id = values(caseman_id)     </insert>
+    <select id="findMarterialByuserId" resultType="vip.imagin.blast.modules.meterial.entity.Marterial"></select>
 
 </mapper>
 

@@ -17,13 +17,10 @@ import java.util.Date;
 @Data
 @TableName("marterial")
 public class Marterial implements Serializable{
-    private static final long serialVersionUID = -40356785423868312L;
     //材料id
     private Long id;
     //上传时间
     private Date date;
-    
-    private String time;
     //案件地点
     private String place;
     //报警单位
@@ -40,10 +37,10 @@ public class Marterial implements Serializable{
     private Integer examined;
     //案件相关图片
     private String picture;
-    //涉爆人
-    private String caseman;
-    //涉爆企业
-    private String caseenterprice;
+//    //涉爆人
+//    private String caseman;
+//    //涉爆企业
+//    private String caseenterprice;
     //涉爆企业id
     private Long caseenterprceId;
     //涉爆人id

@@ -1,5 +1,6 @@
 package vip.imagin.blast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import vip.imagin.blast.modules.user.dao.UserDao;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
@@ -35,8 +36,10 @@ class AppApplicationTests {
         //List<User> users = userMapper.selectList(null);
         //System.out.println(users);
 
-        String redisKey = "login:" + 2;
+        //这是一个bug但是它会自动恢复，所以，别碰
+        String redisKey = "login:" + 1;
         MyUserDetails myUserDetails = redisCache.getCacheObject(redisKey);
+        System.out.println(myUserDetails);
     }
 
     @Test
@@ -67,5 +70,14 @@ class AppApplicationTests {
         String jwt = JwtUtil.createJWT("1");
         System.out.println(jwt);
     }
+
+//    @Test
+//    public void testjson(@Autowired StringRedisTemplate1 red  ){
+//        String mydetails = red.get("login:1");
+//        JSONObject jsonObject = JSONObject.parseObject(mydetails);
+//        MyUserDetails myUserDetails = jsonObject.toJavaObject(MyUserDetails.class);
+//        System.out.println(mydetails);
+//
+//    }
 
 }

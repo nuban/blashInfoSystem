@@ -16,18 +16,21 @@ import java.io.Serializable;
  * @since 2022-04-04 11:55:33
  */
 @Data
-@TableName("caseman")
+@TableName("caseenterprice")
 public class Caseenterprice  implements Serializable  {
 
     private static final long serialVersionUID = -40356785423868312L;
     @TableId/*(type = IdType.NONE)*/
-    //涉爆企业
-    private Long id;
+    //涉爆企业号
+    private Long caseenterpriceid;
     //企业名称
     private String name;
     //企业地址
     private String address;
     //研究方向
     private String direction;
+    //查询原因
+    private String reason;
+
 }
 
