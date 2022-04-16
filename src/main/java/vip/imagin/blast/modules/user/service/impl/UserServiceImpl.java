@@ -112,9 +112,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         map.put("token", jwt);
 
         //把完整用户信息保存到redis
-        redisCache.setCacheObject("login:" + userId, myUserDetails, TimeOut, TimeUnit.HOURS);
-
-        //  MyUserDetails cacheObject = redisCache.getCacheObject("login:1");
+        try {
+            redisCache.setCacheObject("login:" + userId, myUserDetails, TimeOut, TimeUnit.HOURS);
+        }catch (Exception e){
+            log.info("存入redis异常，大概率是redis 没打开");
+            return new Result(Status.REDIS_ERROR);
+        }
 
         return new Result(200, "登录成功", map);
     }

@@ -4,6 +4,7 @@ package vip.imagin.blast.filter;/**
  * @apiNote
  */
 
+import lombok.extern.slf4j.Slf4j;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import vip.imagin.blast.utils.JwtUtil;
 import vip.imagin.blast.utils.RedisCache;
@@ -28,6 +29,7 @@ import java.util.Objects;
  * @description TODO
  * @createDate 2022/3/1
  */
+@Slf4j
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
@@ -48,18 +50,19 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             Claims claims = JwtUtil.parseJWT(token);
             userId = claims.getSubject();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("token非法");
+            log.info("用户随便写了一个token");
+            filterChain.doFilter(request, response);
+            return;
         }
 
         //从redis获取用户信息
         String redisKey = "login:" + userId;
-        MyUserDetails myUserDetails = redisCache.getCacheObject(redisKey);
-
-        //System.out.println(redisCache.getCacheObject(redisKey).toString());
-
+        MyUserDetails  myUserDetails = redisCache.getCacheObject(redisKey);
         if (Objects.isNull(myUserDetails)) {
-            throw new RuntimeException("用户未登录");
+            log.info("用户退出登录，却在访问需要权限的资源");
+            filterChain.doFilter(request, response);
+            return;
+            //throw new RuntimeException("用户未登录");
         }
 
         //存入SecurityContextHolder

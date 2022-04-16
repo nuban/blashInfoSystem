@@ -34,7 +34,7 @@
         </foreach>
         on duplicate key update
          date = values(date) , time = values(time) , place = values(place) , reporter = values(reporter) , description = values(description) , main_explosive = values(main_explosive) , sub_explosive = values(sub_explosive) , user_id = values(user_id) , examined = values(examined) , picture = values(picture) , caseman = values(caseman) , caseenterprice = values(caseenterprice) , caseenterprce_id = values(caseenterprce_id) , caseman_id = values(caseman_id)     </insert>
-    <select id="findMarterialByuserId" resultType="vip.imagin.blast.modules.meterial.entity.Marterial"></select>
+<!--    <select id="findMarterialByuserid" resultType="vip.imagin.blast.modules.meterial.entity.Marterial"></select>-->
 
 </mapper>
 

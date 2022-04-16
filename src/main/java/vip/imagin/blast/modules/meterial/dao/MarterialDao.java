@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import vip.imagin.blast.modules.meterial.entity.Marterial;
 import vip.imagin.blast.modules.user.entity.Menu;
 
+import java.util.List;
+
 /**
  * (Marterial)表数据库访问层
  *
@@ -20,6 +22,6 @@ public interface MarterialDao extends BaseMapper<Marterial> {
 
 
     @Select("select * from marterial where user_id = #{id}")
-    Marterial findMarterialByuserId(Long id);
+    List<Marterial> findMarterialByuserid(Long id);
 }
 

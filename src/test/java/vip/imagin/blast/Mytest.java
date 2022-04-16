@@ -122,4 +122,11 @@ public class Mytest {
         System.out.println("  ");
     }
 
+    @Value("${img.path}")
+    private String filePath;
+    @Test
+    public void testread() {
+        System.out.println(filePath);
+    }
+
 }

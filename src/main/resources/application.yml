@@ -37,6 +37,11 @@ jwt:
 code:
   switch: false
 
+# 图片上传路径
+img:
+  path: E:\expimg\
+  #path: /home/expimg/ # linux系统下的上传路径
+
 
 
 

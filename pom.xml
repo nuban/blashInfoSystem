@@ -105,6 +105,13 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+<!--        引入hutools-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.5.9</version>
+        </dependency>
+
 
     </dependencies>
 

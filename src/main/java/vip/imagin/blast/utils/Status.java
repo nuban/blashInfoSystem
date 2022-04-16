@@ -94,12 +94,14 @@ public enum Status {
      * token过期,请重新登录
      */
     TOKEN_ILLEGAL(10001,"token过期,请重新登录"),
+
     /**
-     * token过期,请重新登录
+     * redis没打开
      */
-    FAILED_AUTHORIZED(500,"授权失败"),
+    REDIS_ERROR(500,"redis错误"),
 
     CODE_EMPTY(400,"请输入验证码");
+
 
     private Integer code;
     private String msg;

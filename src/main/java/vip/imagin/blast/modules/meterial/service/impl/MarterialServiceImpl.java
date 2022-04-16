@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import vip.imagin.blast.utils.Result;
 import vip.imagin.blast.utils.Status;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -57,7 +58,7 @@ public class MarterialServiceImpl implements MarterialService {
      */
     @Override
     public Result listMyList(Long id) {
-        Marterial marterial = materialDao.findMarterialByuserId(id);
+        List<Marterial> marterial = materialDao.findMarterialByuserid(id);
         return new Result(Status.SUCCESS,marterial);
     }
 

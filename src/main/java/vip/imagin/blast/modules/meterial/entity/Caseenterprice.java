@@ -19,7 +19,6 @@ import java.io.Serializable;
 @TableName("caseenterprice")
 public class Caseenterprice  implements Serializable  {
 
-    private static final long serialVersionUID = -40356785423868312L;
     @TableId/*(type = IdType.NONE)*/
     //涉爆企业号
     private Long caseenterpriceid;

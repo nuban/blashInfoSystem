@@ -2,15 +2,18 @@ package vip.imagin.blast.modules.meterial.controller;
 
 
 
+import cn.hutool.core.io.IoUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 import vip.imagin.blast.dto.marteriralDto.MarterialDto;
 import vip.imagin.blast.modules.meterial.entity.Marterial;
 import vip.imagin.blast.modules.meterial.service.MarterialService;
@@ -21,9 +24,15 @@ import vip.imagin.blast.utils.Result;
 import vip.imagin.blast.utils.Status;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * (Marterial)表控制层
@@ -35,6 +44,10 @@ import java.util.List;
 @RequestMapping("material")
 @Api(tags = "案件各种操作的接口")
 public class MarterialController {
+
+    @Value("${img.path}")
+    private String filePath;
+
     /**
      * materaerService
      */
@@ -85,6 +98,65 @@ public class MarterialController {
         return new Result(Status.FAILURE);
     }
 
+    @ApiOperation("上传图片的接口，上传之后会返回一个文件名")
+    @PreAuthorize("hasAuthority('explosive:user')")
+    @PostMapping("imgupload")
+    public Result uploadImage(MultipartFile file){
+        //得到原本的名字
+        String originalFilename = file.getOriginalFilename();
+        //截取后缀名
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String prename = originalFilename.substring(0,originalFilename.lastIndexOf("."));
+        //拼凑文件名,防止重名
+        String fullName = prename+ UUID.randomUUID().toString()+suffix;
+
+        File dir = new File(filePath);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+
+        try {
+            file.transferTo(new File(filePath+fullName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new Result(Status.SUCCESS,fullName);
+    }
+
+    @ApiOperation("图片预览的接口")
+    @PreAuthorize("hasAuthority('explosive:user')")
+    @GetMapping("download")
+    public void download(String filename, HttpServletResponse response){
+
+        try {
+            //输入流，通过输入流读取文件内容
+            FileInputStream fileInputStream = new FileInputStream(new File(filePath + filename));
+
+            //输出流，通过输出流将文件写回浏览器
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            response.setContentType("image/jpeg");
+
+            //使用hutools直接copy
+            IoUtil.copy(fileInputStream, outputStream);
+//            int len = 0;
+//            byte[] bytes = new byte[1024];
+//            while ((len = fileInputStream.read(bytes)) != -1){
+//                outputStream.write(bytes,0,len);
+//                outputStream.flush();
+//            }
+
+            //关闭资源
+            outputStream.close();
+            fileInputStream.close();
+           // return new Result(Status.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+       // return new Result(Status.FAILURE);
+    }
 
 }
 
