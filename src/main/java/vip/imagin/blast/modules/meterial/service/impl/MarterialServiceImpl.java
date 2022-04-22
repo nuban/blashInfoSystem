@@ -1,6 +1,7 @@
 package vip.imagin.blast.modules.meterial.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -82,11 +83,12 @@ public class MarterialServiceImpl implements MarterialService {
         //添加涉事企业
         Caseenterprice caseenterprice = marterial.getCaseenterprice();
         if (!Objects.isNull(caseenterprice)) {
-            //TODO 如果插入了相同的数据
+            //TODO
+            //Insert语句返回插入的id，注：insert会把查到的数据回写到实体类中  数据要先插入再设置
+            caseEnterPriceDao.insertEnterprice(caseenterprice);
             //设置到marterial表对应的实体类中
             finalmarterial.setCaseenterprceId(caseenterprice.getCaseenterpriceid());
-            //Insert语句返回插入的id，注：insert会把查到的数据回写到实体类中
-            caseEnterPriceDao.insertEnterprice(caseenterprice);
+
         } else {
             log.info("caseenterprice为空");
             //为空设置一个0
@@ -95,8 +97,8 @@ public class MarterialServiceImpl implements MarterialService {
         //添加涉事人
         Caseman caseMan = marterial.getCaseman();
         if (!Objects.isNull(caseMan)) {
-            finalmarterial.setCasemanId(caseMan.getCasemanid());
             caseManDao.insert(caseMan);
+            finalmarterial.setCasemanId(caseMan.getCasemanid());
         } else {
             log.info("caseman为空");
             //为空设置一个0
@@ -104,7 +106,21 @@ public class MarterialServiceImpl implements MarterialService {
         }
         //添加主案件
         materialDao.insert(finalmarterial);
+
         return true;
+    }
+
+    /**
+     * 搜索现场描述
+     * @param description
+     * @return
+     */
+    @Override
+    public Result searchPlace(String description) {
+        LambdaQueryWrapper<Marterial> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(!description.isEmpty(),Marterial::getPlaceDescription,description);
+        List<Marterial> marterials = materialDao.selectList(queryWrapper);
+        return new Result(Status.SUCCESS,marterials);
     }
 }
 

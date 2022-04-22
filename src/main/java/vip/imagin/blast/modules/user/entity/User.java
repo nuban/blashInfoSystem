@@ -1,6 +1,8 @@
 package vip.imagin.blast.modules.user.entity;
 
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -40,8 +42,10 @@ public class User implements Serializable {
     //是否删除
     private String delflag;
     //创建时间
+    @TableField(fill = FieldFill.INSERT)
     private Date createtime;
-    //删除时间
+    //更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updatetime;
     //性别
     private String gender;

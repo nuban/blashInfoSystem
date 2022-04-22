@@ -47,7 +47,7 @@ public class Mytest {
     @Test
     public void testprint() {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUsername, "zs");
+        queryWrapper.eq(1==1,User::getUsername, "zs");
         User user = userManager.selectOne(queryWrapper);
         System.out.println(user.toString());
 //        List<User> users = userManager.selectList(null);
@@ -128,5 +128,17 @@ public class Mytest {
     public void testread() {
         System.out.println(filePath);
     }
+
+    @Test
+    public void testqueryWrapper(@Autowired UserDao userDao ) {
+        LambdaQueryWrapper<User> dishLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        //添加查询条件，根据分类id进行查询
+        dishLambdaQueryWrapper.eq(User::getId,1);
+//        int count1 = dishService.count(dishLambdaQueryWrapper);
+        User user = userDao.selectOne(dishLambdaQueryWrapper);
+        System.out.println(user);
+    }
+
+
 
 }

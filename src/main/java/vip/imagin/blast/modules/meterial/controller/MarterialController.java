@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,24 +68,43 @@ public class MarterialController {
        return marterialService.list();
     }
 
-    @ApiOperation("查看自己上传的案件以及进度,根据传上来的id")
+    @ApiOperation("查看当前登录用户上传的案件以及进度")
     @GetMapping("mylist")
     @PreAuthorize("hasAuthority('explosive:user')")
-//    @ApiImplicitParam(name = "用户的id",value = "用户id",
-//            required = true,paramType = "path" /*表示参数放在扫描地方*/)
     public Result getMyList(){
-        //从SecurityContextHolder获取id
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
         Long userId = principal.getUser().getId();
         return marterialService.listMyList(userId);
     }
 
+    @ApiOperation("输入现场描述查询")
+    @GetMapping("searchByPlace")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "description",value = "string "
+            , required = true,paramType = "path" /*表示参数放在扫描地方*/)
+    })
+    @PreAuthorize("hasAuthority('explosive:user')")
+    public Result getPlace(String description){
+        return marterialService.searchPlace(description);
+    }
+
+    @ApiOperation("精确查询")
+    @GetMapping("searchPrecision")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "description",value = "string "
+            , required = true,paramType = "path" /*表示参数放在扫描地方*/)
+    })
+    @PreAuthorize("hasAuthority('explosive:user')")
+    public Result getPricePlace(String description){
+        //TODO 精确查询
+        return marterialService.searchPlace(description);
+    }
+
     @ApiOperation("民警上传案件")
     @PreAuthorize("hasAuthority('explosive:user')")
     @PostMapping("upload")
     public Result uploadMaterial(@RequestBody MarterialDto marterial){
-        //TODO 图片上传,userｉｄ设置
         //从SecurityContextHolder获取当前登录用户id
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
@@ -140,14 +160,6 @@ public class MarterialController {
 
             //使用hutools直接copy
             IoUtil.copy(fileInputStream, outputStream);
-//            int len = 0;
-//            byte[] bytes = new byte[1024];
-//            while ((len = fileInputStream.read(bytes)) != -1){
-//                outputStream.write(bytes,0,len);
-//                outputStream.flush();
-//            }
-
-            //关闭资源
             outputStream.close();
             fileInputStream.close();
            // return new Result(Status.SUCCESS);
@@ -155,7 +167,6 @@ public class MarterialController {
             e.printStackTrace();
         }
 
-       // return new Result(Status.FAILURE);
     }
 
 }

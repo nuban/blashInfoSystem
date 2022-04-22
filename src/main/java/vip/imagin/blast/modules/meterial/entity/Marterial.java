@@ -26,7 +26,9 @@ public class Marterial implements Serializable{
     //报警单位
     private String reporter;
     //案件描述
-    private String description;
+    private String placeDescription;
+    //现场描述
+    private String caseDescription;
     //主要的爆炸物
     private String mainExplosive;
     //次要爆炸物

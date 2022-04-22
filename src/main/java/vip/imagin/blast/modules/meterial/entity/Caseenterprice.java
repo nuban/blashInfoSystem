@@ -28,8 +28,6 @@ public class Caseenterprice  implements Serializable  {
     private String address;
     //研究方向
     private String direction;
-    //查询原因
-    private String reason;
 
 }
 
