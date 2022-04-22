@@ -32,7 +32,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -89,16 +91,20 @@ public class MarterialController {
         return marterialService.searchPlace(description);
     }
 
+
     @ApiOperation("精确查询")
     @GetMapping("searchPrecision")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "description",value = "string "
+            @ApiImplicitParam(name = "descriptions",value = "string "
             , required = true,paramType = "path" /*表示参数放在扫描地方*/)
     })
     @PreAuthorize("hasAuthority('explosive:user')")
-    public Result getPricePlace(String description){
-        //TODO 精确查询
-        return marterialService.searchPlace(description);
+    public Result getPricePlace( String descriptions){
+        //TODO 精确查询分词返回数组,String nums[];
+        String strings[] = {"情况"} ;
+
+        return marterialService.searchprecise(strings);
+
     }
 
     @ApiOperation("民警上传案件")

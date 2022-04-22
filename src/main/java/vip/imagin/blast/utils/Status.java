@@ -93,7 +93,7 @@ public enum Status {
     /**
      * token过期,请重新登录
      */
-    TOKEN_ILLEGAL(10001,"token过期,请重新登录"),
+    POSTSUCCESS(200,"提交成功，等待审核"),
 
     /**
      * redis没打开

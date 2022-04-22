@@ -31,6 +31,7 @@ public class Caseman  implements Serializable {
     private String birthday;
     private String identityNumber;
     private String address;
+    private String picture;
     private String gender;
     private String phonenumber;
     private String firm;

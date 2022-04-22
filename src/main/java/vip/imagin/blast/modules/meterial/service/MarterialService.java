@@ -20,5 +20,7 @@ public interface MarterialService {
     boolean uploadMaterial(MarterialDto marterial);
 
     Result searchPlace(String description);
+
+    Result searchprecise(String[] strings);
 }
 

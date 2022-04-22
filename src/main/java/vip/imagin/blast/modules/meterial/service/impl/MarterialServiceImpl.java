@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import vip.imagin.blast.utils.Result;
 import vip.imagin.blast.utils.Status;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -121,6 +122,22 @@ public class MarterialServiceImpl implements MarterialService {
         queryWrapper.like(!description.isEmpty(),Marterial::getPlaceDescription,description);
         List<Marterial> marterials = materialDao.selectList(queryWrapper);
         return new Result(Status.SUCCESS,marterials);
+    }
+
+    /**
+     * 精确查询
+     * @param strings
+     * @return
+     */
+    @Override
+    public Result searchprecise(String[] strings) {
+        List<List<Marterial>> list = new ArrayList();
+        for(String description:strings){
+            LambdaQueryWrapper<Marterial> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.like(!description.equals(null),Marterial::getPlaceDescription,description);
+            list.add(materialDao.selectList(queryWrapper));
+        }
+        return new Result(Status.SUCCESS,list);
     }
 }
 
