@@ -32,7 +32,7 @@ public enum Status {
     /**
      * 操作失败
      */
-    FAILURE(500,"操作失败"),
+    FAILURE(500,"操作失败，身份证号不正确或者已经提交过！"),
 
     /**
      * 操作失败,信息不存在
@@ -78,7 +78,7 @@ public enum Status {
     /**
      * 注册失败，该用户已存在
      */
-    FAILED_REGISTRATION(406,"注册失败，该用户已存在"),
+    NO_PASS(200,"审核不通过"),
 
     /**
      * 认证失败请重新登录
@@ -88,7 +88,7 @@ public enum Status {
     /**
      * 没有操作权限
      */
-    FORBIDDEN(403,"没有操作权限"),
+    PASS_CASE_TEMP(200,"审核通过"),
 
     /**
      * token过期,请重新登录
@@ -101,7 +101,6 @@ public enum Status {
     REDIS_ERROR(500,"redis错误"),
 
     CODE_EMPTY(400,"请输入验证码");
-
 
     private Integer code;
     private String msg;

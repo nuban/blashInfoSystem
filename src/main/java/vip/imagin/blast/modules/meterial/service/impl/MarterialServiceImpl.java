@@ -61,7 +61,7 @@ public class MarterialServiceImpl implements MarterialService {
     @Override
     public Result listMyList(Long id) {
         List<Marterial> marterial = materialDao.findMarterialByuserid(id);
-        return new Result(Status.SUCCESS,marterial);
+        return new Result(Status.SUCCESS, marterial);
     }
 
     /**
@@ -113,31 +113,36 @@ public class MarterialServiceImpl implements MarterialService {
 
     /**
      * 搜索现场描述
+     *
      * @param description
      * @return
      */
     @Override
     public Result searchPlace(String description) {
         LambdaQueryWrapper<Marterial> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(!description.isEmpty(),Marterial::getPlaceDescription,description);
+        queryWrapper.like(!description.isEmpty(), Marterial::getPlaceDescription, description);
         List<Marterial> marterials = materialDao.selectList(queryWrapper);
-        return new Result(Status.SUCCESS,marterials);
+        return new Result(Status.SUCCESS, marterials);
     }
 
     /**
      * 精确查询
+     *
      * @param strings
      * @return
      */
     @Override
     public Result searchprecise(String[] strings) {
-        List<List<Marterial>> list = new ArrayList();
-        for(String description:strings){
-            LambdaQueryWrapper<Marterial> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.like(!description.equals(null),Marterial::getPlaceDescription,description);
-            list.add(materialDao.selectList(queryWrapper));
-        }
-        return new Result(Status.SUCCESS,list);
+        LambdaQueryWrapper<Marterial> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.and(ilqw -> {
+            for (String string : strings) {
+                ilqw.or(iilqw -> iilqw.like(null != string, Marterial::getPlaceDescription, string));
+            }
+        });
+
+        List<Marterial> marterials = materialDao.selectList(queryWrapper);
+        return new Result(Status.SUCCESS, marterials);
     }
 }
 

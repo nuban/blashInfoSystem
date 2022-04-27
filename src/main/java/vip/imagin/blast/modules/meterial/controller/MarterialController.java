@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,10 +28,7 @@ import vip.imagin.blast.utils.Status;
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +43,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("material")
+@Slf4j
 @Api(tags = "案件各种操作的接口")
 public class MarterialController {
 
@@ -92,7 +91,7 @@ public class MarterialController {
     }
 
 
-    @ApiOperation("精确查询")
+    @ApiOperation("精确查询(python分词部分)")
     @GetMapping("searchPrecision")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "descriptions",value = "string "
@@ -100,8 +99,34 @@ public class MarterialController {
     })
     @PreAuthorize("hasAuthority('explosive:user')")
     public Result getPricePlace( String descriptions){
-        //TODO 精确查询分词返回数组,String nums[];
-        String strings[] = {"情况"} ;
+        //分词
+        List<String> list = new ArrayList<String>();
+        Process proc;
+        try {
+            proc = Runtime.getRuntime().exec(new String[] {"python","E:\\java\\JavaSeLearn\\第八章\\src\\python\\mian.py" ,descriptions});// 执行py文件
+            //用输入输出流来截取结果
+            BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"GBK"));
+            String line = null;
+            String temp = null;
+            while ((temp = in.readLine()) != null) {
+                line = temp;
+                String substring = line.substring(1, line.length() - 1);
+                String[] split = substring.split("\'");
+                for (int i = 0 ;i < split.length;i++) {
+                    if(i%2 == 1){
+                        list.add(split[i]);
+                    }
+                }
+            }
+            log.info("分词结果：[]",list);
+            in.close();
+            proc.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String[] strings = list.toArray(new String[list.size()]);
 
         return marterialService.searchprecise(strings);
 

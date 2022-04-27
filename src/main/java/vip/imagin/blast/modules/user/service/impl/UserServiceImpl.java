@@ -5,22 +5,23 @@ import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FastByteArrayOutputStream;
 import vip.imagin.blast.dto.LoginUser;
 import vip.imagin.blast.dto.SignUser;
 import vip.imagin.blast.modules.user.dao.UserDao;
+import vip.imagin.blast.modules.user.dao.UserRoleDao;
 import vip.imagin.blast.modules.user.entity.CaptchImg;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import vip.imagin.blast.modules.user.entity.User;
+import vip.imagin.blast.modules.user.entity.RoleUser;
 import vip.imagin.blast.modules.user.service.UserService;
 import org.springframework.stereotype.Service;
 import vip.imagin.blast.utils.*;
@@ -28,10 +29,8 @@ import vip.imagin.blast.utils.*;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -65,6 +64,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 //    private Long timeOut;
     @Autowired
     private UserDao userdao;
+
+    @Autowired
+    private UserRoleDao userRoleDao;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -137,9 +139,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
 
     //注册
     @Override
+    @Transactional
     public Result signIn(SignUser signUser) {
-        //TODO 邀请码的校验
-
+        //TODO 邀请码的校验,且只能用一次
         //遇到重名
         User user = userdao.findbyName(signUser.getUserName());
         if(user != null){
@@ -149,9 +151,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         PasswordEncoder ps = new BCryptPasswordEncoder();
         String passwordEncoder = ps.encode(signUser.getPassword());
         //没重名
-        int insert = userdao.insert(new User(signUser.getUserName(), passwordEncoder,signUser.getSignCode()));
+        User registerUser = new User(signUser.getUserName(), passwordEncoder, signUser.getSignCode());
+        int insert = userdao.insert(registerUser);
         if(insert != 0){
-          return new Result(200,"注册成功");
+            Long id = registerUser.getId();
+            //授权
+            RoleUser userRole = new RoleUser(id);
+            userRoleDao.insert(userRole);
+            return new Result(200,"注册成功");
         }
         return new Result(500,"注册失败，联系管理员。");
     }

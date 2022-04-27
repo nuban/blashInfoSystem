@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.imagin.blast.modules.selectsomething.entity.SelectCaseenterpriceTemp">
+
+    <resultMap type="vip.imagin.blast.modules.selectsomething.entity.SelectCaseenterpriceTemp" id="SelectCaseenterpriceTempMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="enterpriceNumber" column="enterprice_number" jdbcType="VARCHAR"/>
+        <result property="selectReason" column="select_reason" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="noReason" column="no_reason" jdbcType="VARCHAR"/>
+        <result property="caseenterpriceid" column="caseenterpriceid" jdbcType="INTEGER"/>
+        <result property="checked" column="checked" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SelectCaseenterpriceTempMap">
+        select
+          id, caseenterprice_id, enterprice_number, select_reason, status, no_reason, caseenterpriceid, checked
+        from select_caseenterprice_temp
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SelectCaseenterpriceTempMap">
+        select
+          id, caseenterprice_id, enterprice_number, select_reason, status, no_reason, caseenterpriceid, checked
+        from select_caseenterprice_temp
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="caseenterpriceId != null">
+                and caseenterprice_id = #{caseenterpriceId}
+            </if>
+            <if test="enterpriceNumber != null and enterpriceNumber != ''">
+                and enterprice_number = #{enterpriceNumber}
+            </if>
+            <if test="selectReason != null and selectReason != ''">
+                and select_reason = #{selectReason}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="noReason != null and noReason != ''">
+                and no_reason = #{noReason}
+            </if>
+            <if test="caseenterpriceid != null">
+                and caseenterpriceid = #{caseenterpriceid}
+            </if>
+            <if test="checked != null and checked != ''">
+                and checked = #{checked}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from select_caseenterprice_temp
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="caseenterpriceId != null">
+                and caseenterprice_id = #{caseenterpriceId}
+            </if>
+            <if test="enterpriceNumber != null and enterpriceNumber != ''">
+                and enterprice_number = #{enterpriceNumber}
+            </if>
+            <if test="selectReason != null and selectReason != ''">
+                and select_reason = #{selectReason}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="noReason != null and noReason != ''">
+                and no_reason = #{noReason}
+            </if>
+            <if test="caseenterpriceid != null">
+                and caseenterpriceid = #{caseenterpriceid}
+            </if>
+            <if test="checked != null and checked != ''">
+                and checked = #{checked}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into select_caseenterprice_temp(caseenterprice_id, enterprice_number, select_reason, status, no_reason, caseenterpriceid, checked)
+        values (#{caseenterpriceId}, #{enterpriceNumber}, #{selectReason}, #{status}, #{noReason}, #{caseenterpriceid}, #{checked})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into select_caseenterprice_temp(caseenterprice_id, enterprice_number, select_reason, status, no_reason, caseenterpriceid, checked)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.caseenterpriceId}, #{entity.enterpriceNumber}, #{entity.selectReason}, #{entity.status}, #{entity.noReason}, #{entity.caseenterpriceid}, #{entity.checked})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into select_caseenterprice_temp(caseenterprice_id, enterprice_number, select_reason, status, no_reason, caseenterpriceid, checked)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.caseenterpriceId}, #{entity.enterpriceNumber}, #{entity.selectReason}, #{entity.status}, #{entity.noReason}, #{entity.caseenterpriceid}, #{entity.checked})
+        </foreach>
+        on duplicate key update
+        caseenterprice_id = values(caseenterprice_id),
+        enterprice_number = values(enterprice_number),
+        select_reason = values(select_reason),
+        status = values(status),
+        no_reason = values(no_reason),
+        caseenterpriceid = values(caseenterpriceid),
+        checked = values(checked)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update select_caseenterprice_temp
+        <set>
+            <if test="caseenterpriceId != null">
+                caseenterprice_id = #{caseenterpriceId},
+            </if>
+            <if test="enterpriceNumber != null and enterpriceNumber != ''">
+                enterprice_number = #{enterpriceNumber},
+            </if>
+            <if test="selectReason != null and selectReason != ''">
+                select_reason = #{selectReason},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="noReason != null and noReason != ''">
+                no_reason = #{noReason},
+            </if>
+            <if test="caseenterpriceid != null">
+                caseenterpriceid = #{caseenterpriceid},
+            </if>
+            <if test="checked != null and checked != ''">
+                checked = #{checked},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from select_caseenterprice_temp where id = #{id}
+    </delete>
+
+</mapper>
+

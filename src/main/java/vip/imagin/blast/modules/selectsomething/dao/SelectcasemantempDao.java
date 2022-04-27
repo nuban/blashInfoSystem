@@ -2,6 +2,7 @@ package vip.imagin.blast.modules.selectsomething.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import vip.imagin.blast.modules.selectsomething.entity.Selectcasemantemp;
 
@@ -15,5 +16,7 @@ import vip.imagin.blast.modules.selectsomething.entity.Selectcasemantemp;
 @Repository
 public interface SelectcasemantempDao extends BaseMapper<Selectcasemantemp> {
 
+    @Select("select count(*) from selectcasemantemp where identity_number= #{identityNumber} and user_id = #{id}")
+    int selectId(Long id ,String identityNumber);
 }
 

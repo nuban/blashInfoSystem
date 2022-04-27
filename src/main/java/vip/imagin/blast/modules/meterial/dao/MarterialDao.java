@@ -23,5 +23,8 @@ public interface MarterialDao extends BaseMapper<Marterial> {
 
     @Select("select * from marterial where user_id = #{id}")
     List<Marterial> findMarterialByuserid(Long id);
+
+    List<Marterial> selectByDescription(String[] strings);
+
 }
 

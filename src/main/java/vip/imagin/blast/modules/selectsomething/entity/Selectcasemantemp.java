@@ -1,7 +1,9 @@
 package vip.imagin.blast.modules.selectsomething.entity;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -13,6 +15,8 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Selectcasemantemp extends Model<Selectcasemantemp> {
     
     private Integer id;
@@ -28,6 +32,8 @@ public class Selectcasemantemp extends Model<Selectcasemantemp> {
     private String noReason;
     //涉事人id
     private Long casemanid;
+
+    private String checked;
 
 }
 

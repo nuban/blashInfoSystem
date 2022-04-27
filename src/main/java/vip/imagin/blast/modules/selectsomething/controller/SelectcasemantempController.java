@@ -2,6 +2,7 @@ package vip.imagin.blast.modules.selectsomething.controller;
 
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -21,11 +22,11 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
 /**
- * 查询隐私信息审核
+ * 隐私信息查询
  */
 
 @RestController
-@Api(tags = "隐私查询")
+@Api(tags = "隐私查询-----涉事人查询")
 @RequestMapping("selectcaseman")
 public class SelectcasemantempController{
     /**
@@ -35,26 +36,31 @@ public class SelectcasemantempController{
     private SelectcasemantempService selectcasemantempService;
 
     /**
-     * 管理员  分页查询所有数据
+     * 管理员分页查询所有数据请求
      * @param page 分页对象
      * @return 所有数据
      */
-    @GetMapping("list")
-    @ApiOperation(value = "传入分页 current size")
+    @GetMapping("list/{id}")
+    @ApiOperation(value = "管理员分页查看所有数据请求1代表查看未审核，0表示已经审核 传入分页current size")
     @PreAuthorize("hasAuthority('explosive:admin')")
-    public Result selectAll(Page<Selectcasemantemp> page) {
-        return new Result(Status.SUCCESS, this.selectcasemantempService.page(page));
+    public Result selectAll(@PathVariable Integer id,Page<Selectcasemantemp> page) {
+
+        LambdaQueryWrapper<Selectcasemantemp> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Selectcasemantemp::getChecked,id);
+        return new Result(Status.SUCCESS, this.selectcasemantempService.page(page,wrapper));
     }
 
     /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
+     * 管理员审核案件
+     * 审核的结果
+     * @return 所有数据
      */
-    @GetMapping("{id}")
-    public Result selectOne(@PathVariable Serializable id) {
-        return  new Result(Status.SUCCESS, this.selectcasemantempService.getById(id));
+    @PostMapping("check")
+    @ApiOperation(value = "管理员审核通过还是不通过")
+    @PreAuthorize("hasAuthority('explosive:admin')")
+    public Result changeManTempDto(@RequestBody Selectcasemantemp selectcasemantemp) {
+        boolean flag = this.selectcasemantempService.updateCaseManTemp(selectcasemantemp);
+        return flag?  new Result(Status.PASS_CASE_TEMP):new Result(Status.NO_PASS);
     }
 
     /**
@@ -63,8 +69,8 @@ public class SelectcasemantempController{
      * @return
      */
     @PreAuthorize("hasAuthority('explosive:user')")
-    @ApiOperation(value = "就传入原因和和身份证号就行了")
-    @PostMapping("/findcaseman")
+    @ApiOperation(value = "警员提交申请 就传入原因和和身份证号就行了")
+    @PostMapping("/postFindCaseMan")
     public Result postOne(@RequestBody CasemanTempDto casemanTempDto) {
         //从SecurityContextHolder获取当前登录用户id
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -77,37 +83,21 @@ public class SelectcasemantempController{
         }
         return  new Result(Status.FAILURE);
     }
-    /**
-     * 新增数据
-     *
-     * @param selectcasemantemp 实体对象
-     * @return 新增结果
-     */
-    @PostMapping
-    public Result insert(@RequestBody Selectcasemantemp selectcasemantemp) {
-        return  new Result(Status.SUCCESS, this.selectcasemantempService.save(selectcasemantemp));
-    }
 
     /**
-     * 修改数据
-     *
-     * @param selectcasemantemp 实体对象
-     * @return 修改结果
+     * 查看我的申请列表
+     * @return
      */
-    @PutMapping
-    public Result update(@RequestBody Selectcasemantemp selectcasemantemp) {
-        return  new Result(Status.SUCCESS, this.selectcasemantempService.updateById(selectcasemantemp));
+    @GetMapping("myList")
+    @PreAuthorize("hasAuthority('explosive:user')")
+    @ApiOperation(value = "警员查询自己申请的状态")
+    public Result selectMyList(Page page) {
+        //从SecurityContextHolder获取当前登录用户id
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails principal = (MyUserDetails) authentication.getPrincipal();
+        Long userid = principal.getUser().getId();
+        return  selectcasemantempService.selectMyList(userid,page);
     }
 
-    /**
-     * 删除数据
-     *
-     * @param idList 主键结合
-     * @return 删除结果
-     */
-    @DeleteMapping
-    public Result delete(@RequestParam("idList") List<Long> idList) {
-        return  new Result(Status.SUCCESS, this.selectcasemantempService.removeByIds(idList));
-    }
 }
 

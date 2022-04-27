@@ -1,7 +1,10 @@
 package vip.imagin.blast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import vip.imagin.blast.modules.meterial.dao.MarterialDao;
+import vip.imagin.blast.modules.meterial.entity.Marterial;
 import vip.imagin.blast.modules.user.dao.UserDao;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
 
@@ -27,6 +30,20 @@ class AppApplicationTests {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username","zs");
         System.out.println(userMapper.selectOne(userQueryWrapper));
+    }
+
+
+    @Test
+    public void testmp(@Autowired MarterialDao materialDao){
+        String [] strings = {"原子弹","炸弹","火药","情况"};
+        LambdaQueryWrapper<Marterial> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.and(ilqw -> {
+            for (String string : strings) {
+                ilqw.or(iilqw -> iilqw.like(null != string, Marterial::getPlaceDescription, string));
+            }
+        });
+        List<Marterial> marterials = materialDao.selectList(queryWrapper);
     }
 
     @Autowired

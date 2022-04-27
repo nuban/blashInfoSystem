@@ -23,6 +23,9 @@ import java.io.Serializable;
 @TableName("caseman")
 public class Caseman  implements Serializable {
 
+    /**
+     * 这里改了实体类，对应的vo也要记住改下
+     */
     //涉爆人员身份证
     @TableId(type = IdType.NONE)
     private Long casemanid;
