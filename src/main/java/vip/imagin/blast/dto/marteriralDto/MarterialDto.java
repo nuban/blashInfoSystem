@@ -41,7 +41,5 @@ public class MarterialDto {
     private Caseenterprice caseenterprice;
     //涉爆人
     private Caseman caseman;
-
-
 }
 

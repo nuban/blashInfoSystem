@@ -98,7 +98,7 @@ public class SelectCaseenterpriceTempServiceImpl extends ServiceImpl<SelectCasee
     @Override
     public boolean updateCaseEnterprise(SelectCaseenterpriceTemp selectCaseenterpriceTemp) {
         //查找selecttemp的status是不是等于1
-        //TODO 有bug 不想写了
+        //TODO 有bug 不想写了.好像没了
         if("1".equals(selectCaseenterpriceTemp.getStatus())){
             //通过审核，用企业号查询相关数据
             Long caseEnterPriceId = caseEnterPriceDao.selectId(selectCaseenterpriceTemp.getEnterpriceNumber());

@@ -2,11 +2,13 @@ package vip.imagin.blast.modules.meterial.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import vip.imagin.blast.dto.marteriralDto.MarterialCheckDto;
 import vip.imagin.blast.dto.marteriralDto.MarterialDto;
 import vip.imagin.blast.modules.meterial.dao.CaseEnterPriceDao;
 import vip.imagin.blast.modules.meterial.dao.CaseManDao;
@@ -46,10 +48,17 @@ public class MarterialServiceImpl implements MarterialService {
      * @return
      */
     @Override
-    public Result list() {
-
-
-        return new Result(Status.SUCCESS, materialDao.selectList(null));
+    public Result list(Integer id, Page<Marterial> page) {
+        LambdaQueryWrapper<Marterial> wrapper = new LambdaQueryWrapper<>();
+        //'1'表示查询已经审核
+        if(id == 1){
+            log.info("管理员查看已经审核的列表");
+            wrapper.eq(Marterial::getExamined,"1");
+        }else {
+            log.info("管理员查看未审核列表");
+            wrapper.eq(Marterial::getExamined,"0");
+        }
+        return new Result(Status.SUCCESS, materialDao.selectPage(page,wrapper));
     }
 
     /**
@@ -143,6 +152,20 @@ public class MarterialServiceImpl implements MarterialService {
 
         List<Marterial> marterials = materialDao.selectList(queryWrapper);
         return new Result(Status.SUCCESS, marterials);
+    }
+
+
+    @Override
+    public Result checklist(MarterialCheckDto result) {
+        //审核通过，更改数据
+        if("1".equals(result.getPassed())){
+            materialDao.updateByMarterial1Id(result.getId());
+            return  new Result(Status.PASS_CASE_TEMP);
+        }else {
+            //审核不通过
+            materialDao.updateByMarterialId(result.getId(),result.getNoPassReason());
+            return new Result(Status.GO_AWAY);
+        }
     }
 }
 

@@ -83,7 +83,7 @@ public enum Status {
     /**
      * 认证失败请重新登录
      */
-    UNAUTHORIZED(401,"认证失败请重新登录"),
+    GO_AWAY(200,"已拒绝"),
 
     /**
      * 没有操作权限

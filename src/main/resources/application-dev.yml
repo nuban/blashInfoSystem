@@ -5,9 +5,10 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:mysql://47.108.224.192:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
-    url: jdbc:mysql://localhost:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
+#    url: jdbc:mysql://localhost:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://124.220.166.58:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
     username: root
-    password: root
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
   #解决控制台的druid问题 :testWhileIdle is true, validationQuery not set
     druid:
@@ -21,12 +22,12 @@ spring:
     # redis数据库索引(默认为0)，我们使用索引为3的数据库，避免和其他数据库冲突
     database: 0
     # redis服务器地址（默认为loaclhost）
-#    host: 47.108.224.192
-    host: localhost
+    host: 47.108.224.192
+#    host: localhost
     # redis端口（默认为6379）
     port: 6379
     # redis访问密码（默认为空）
-#    password: 123456
+    password: 291189@qq.comYWD
     #password:
     # redis连接超时时间（单位毫秒）
     timeout: 1000

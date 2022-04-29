@@ -48,5 +48,11 @@ public class Marterial implements Serializable{
     //涉爆人id
     private Long casemanId;
 
+    //通过
+    private String passed;
+    //不通过原因
+    private String noPassReason;
+
+
 }
 

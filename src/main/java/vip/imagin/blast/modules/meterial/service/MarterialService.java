@@ -1,6 +1,8 @@
 package vip.imagin.blast.modules.meterial.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import vip.imagin.blast.dto.marteriralDto.MarterialCheckDto;
 import vip.imagin.blast.dto.marteriralDto.MarterialDto;
 import vip.imagin.blast.modules.meterial.entity.Marterial;
 import vip.imagin.blast.utils.Result;
@@ -13,7 +15,7 @@ import vip.imagin.blast.utils.Result;
  */
 public interface MarterialService {
 
-    Result list();
+    Result list(Integer id, Page<Marterial> page);
 
     Result listMyList(Long id);
 
@@ -22,5 +24,7 @@ public interface MarterialService {
     Result searchPlace(String description);
 
     Result searchprecise(String[] strings);
+
+    Result checklist(MarterialCheckDto result);
 }
 

@@ -16,10 +16,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
+import vip.imagin.blast.dto.marteriralDto.MarterialCheckDto;
 import vip.imagin.blast.dto.marteriralDto.MarterialDto;
 import vip.imagin.blast.modules.meterial.entity.Marterial;
 import vip.imagin.blast.modules.meterial.service.MarterialService;
 import org.springframework.web.bind.annotation.*;
+import vip.imagin.blast.modules.selectsomething.entity.SelectCaseenterpriceTemp;
 import vip.imagin.blast.modules.user.entity.MyUserDetails;
 import vip.imagin.blast.modules.user.entity.User;
 import vip.imagin.blast.utils.Result;
@@ -62,11 +64,18 @@ public class MarterialController {
         return new Result(Status.SUCCESS);
     }
 
-    @ApiOperation("管理员查询案件列表功能")
-    @GetMapping("list")
-    @PreAuthorize("hasAuthority('explosive:administer')")
-    public Result getList(){
-       return marterialService.list();
+    @ApiOperation("管理员查询案件列表功能,1表示查看已经审核，0表示没有审核,传入分页参数current,size")
+    @GetMapping("list/{id}")
+    @PreAuthorize("hasAuthority('explosive:admin')")
+    public Result getList(@PathVariable Integer id,Page<Marterial> page){
+       return marterialService.list(id,page);
+    }
+
+    @ApiOperation("管理员审核案件")
+    @PostMapping("check")
+    @PreAuthorize("hasAuthority('explosive:admin')")
+    public Result checklist(@RequestBody MarterialCheckDto result){
+        return marterialService.checklist(result);
     }
 
     @ApiOperation("查看当前登录用户上传的案件以及进度")
