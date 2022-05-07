@@ -42,6 +42,13 @@ img:
   path: E:\expimg\
   #path: /home/expimg/ # linux系统下的上传路径
 
+# python文件的位置在什么地方
+pythonpath:
+  # windows环境
+  path: D:\桌面\rebot\SpringBootBase-main\src\main\java\vip\imagin\blast\modules\meterial\controller\mian.py
+  # linux环境
+  #path: /home/mian.py
+
 
 
 

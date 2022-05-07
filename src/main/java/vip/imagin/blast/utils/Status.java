@@ -95,13 +95,14 @@ public enum Status {
      */
     POSTSUCCESS(200,"提交成功，等待审核"),
 
+    FAIL(500,"提交失败"),
+
     /**
      * redis没打开
      */
     REDIS_ERROR(500,"redis错误"),
 
     CODE_EMPTY(400,"请输入验证码");
-
     private Integer code;
     private String msg;
 

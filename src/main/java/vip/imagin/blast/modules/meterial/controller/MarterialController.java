@@ -49,6 +49,9 @@ import java.util.UUID;
 @Api(tags = "案件各种操作的接口")
 public class MarterialController {
 
+    @Value("${pythonpath.path}")
+    String path;
+
     @Value("${img.path}")
     private String filePath;
 
@@ -112,7 +115,8 @@ public class MarterialController {
         List<String> list = new ArrayList<String>();
         Process proc;
         try {
-            proc = Runtime.getRuntime().exec(new String[] {"python","E:\\java\\JavaSeLearn\\第八章\\src\\python\\mian.py" ,descriptions});// 执行py文件
+            // 执行py文件
+            proc = Runtime.getRuntime().exec(new String[] {"python",path ,descriptions});
             //用输入输出流来截取结果
             BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream(),"GBK"));
             String line = null;

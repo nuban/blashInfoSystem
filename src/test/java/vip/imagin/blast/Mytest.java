@@ -139,6 +139,12 @@ public class Mytest {
         System.out.println(user);
     }
 
+    @Value("${pythonpath.path}")
+    String path;
+    @Test
+    public void test(){
+        System.out.println(path);
+    }
 
 
 }

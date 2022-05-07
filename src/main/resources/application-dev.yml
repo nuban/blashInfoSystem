@@ -5,10 +5,11 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:mysql://47.108.224.192:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
-#    url: jdbc:mysql://localhost:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
-    url: jdbc:mysql://124.220.166.58:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
+#    url: jdbc:mysql://124.220.166.58:3306/explosive?characterEncoding=utf-8&serverTimezone=UTC
     username: root
-    password: 123456
+#    password: 123456
+    password: root
     type: com.alibaba.druid.pool.DruidDataSource
   #解决控制台的druid问题 :testWhileIdle is true, validationQuery not set
     druid:

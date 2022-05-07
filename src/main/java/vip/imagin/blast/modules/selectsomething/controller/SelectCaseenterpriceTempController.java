@@ -22,10 +22,7 @@ import vip.imagin.blast.utils.Status;
 import javax.annotation.Resource;
 
 /**
- * (SelectCaseenterpriceTemp)表控制层
- *
- * @author makejava
- * @since 2022-04-26 19:24:39
+ * 隐私查询，涉事企业查询
  */
 @RestController
 @Api(tags = "隐私查询-----涉事企业查询")
