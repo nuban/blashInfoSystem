@@ -33,7 +33,7 @@ jwt:
   codeTimeOut: 5  #分钟
   jwtTimeOut: 24  #小时
 
-# 验证码开关
+# 验证码开关1
 code:
   switch: false
 

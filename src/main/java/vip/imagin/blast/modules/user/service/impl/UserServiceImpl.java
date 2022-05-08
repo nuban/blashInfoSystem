@@ -16,12 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FastByteArrayOutputStream;
 import vip.imagin.blast.dto.LoginUser;
 import vip.imagin.blast.dto.SignUser;
+import vip.imagin.blast.modules.user.controller.AiFace;
 import vip.imagin.blast.modules.user.dao.UserDao;
 import vip.imagin.blast.modules.user.dao.UserRoleDao;
-import vip.imagin.blast.modules.user.entity.CaptchImg;
-import vip.imagin.blast.modules.user.entity.MyUserDetails;
-import vip.imagin.blast.modules.user.entity.User;
-import vip.imagin.blast.modules.user.entity.RoleUser;
+import vip.imagin.blast.modules.user.entity.*;
 import vip.imagin.blast.modules.user.service.UserService;
 import org.springframework.stereotype.Service;
 import vip.imagin.blast.utils.*;
@@ -29,6 +27,7 @@ import vip.imagin.blast.utils.*;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -44,6 +43,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService {
 
+    @Autowired
+    private Setingmodel setingmodel;
     /**
      * 从配置文件中读取数据
      */
@@ -192,6 +193,22 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         redisCache.setCacheObject(varify,code,codeTimeOut, TimeUnit.MINUTES);
         Result result = new Result(200, "验证码响应成功", captchImg);
         return result;
+    }
+
+    //人脸
+    @Override
+    public Map<String, Object> searchface(StringBuilder img) {
+        String substring = img.substring(img.indexOf(",")+1, img.length());
+        setingmodel.setImgpath(substring);
+        setingmodel.setGroupID("good_person");
+        System.out.println(substring);
+        Map map = null;
+        try {
+            map = AiFace.FaceSearch(setingmodel);
+        } catch (IOException e) {
+            return map;
+        }
+        return map;
     }
 }
 

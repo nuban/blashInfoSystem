@@ -6,6 +6,8 @@ import vip.imagin.blast.dto.SignUser;
 import vip.imagin.blast.modules.user.entity.User;
 import vip.imagin.blast.utils.Result;
 
+import java.util.Map;
+
 /**
  * (User)表服务接口
  *
@@ -36,5 +38,6 @@ public interface UserService extends IService<User> {
 
     Result getCaptch();
 
+    Map<String, Object> searchface(StringBuilder img);
 }
 
