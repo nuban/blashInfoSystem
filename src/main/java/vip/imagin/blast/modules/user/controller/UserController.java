@@ -114,6 +114,12 @@ public class UserController{
         return userService.getCaptch();
     }
 
+    @ApiOperation("获取用户信息")
+    @GetMapping("info")
+    public Result getUserinfo(String token){
+        return userService.getUserInfo(token);
+    }
+
 
     @ApiOperation("在已经登录后添加，注册人脸的功能")
     @PreAuthorize("hasAuthority('explosive:user')")
@@ -156,7 +162,7 @@ public class UserController{
 
     @ApiOperation("人脸登录部分，登录成功返回token")
     @PostMapping("faceLogin")
-    public Result faceLogin(@RequestBody @RequestParam(name = "img")  StringBuilder img){
+    public Result faceLogin(@RequestBody @RequestParam(name = "img") StringBuilder img){
         System.out.println("图片:"+img);
         Map<String, Object> searchface = userService.searchface(img);
         if(searchface==null||searchface.get("user_id")==null){

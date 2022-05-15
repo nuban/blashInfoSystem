@@ -76,6 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/signin").anonymous()
                 // 对于获取验证码接口 允许匿名访问
                 .antMatchers("/user/captch").anonymous()
+                .antMatchers("/user/info").anonymous()
+                .antMatchers("/user/faceLogin").anonymous()
 //                .antMatchers("/user/**").anonymous()
                 .antMatchers("/material/test").anonymous()
                 .antMatchers("/swagger-ui/**").anonymous()

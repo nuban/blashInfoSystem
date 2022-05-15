@@ -2,6 +2,7 @@ package vip.imagin.blast.modules.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.code.kaptcha.Producer;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -209,6 +210,20 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             return map;
         }
         return map;
+    }
+
+    @Override
+    public Result getUserInfo(String token) {
+        Long userId = 0L;
+        try {
+            Claims claims = JwtUtil.parseJWT(token);
+            userId = Long.valueOf(claims.getSubject());
+        } catch (Exception e) {
+            log.info("用户随便写了一个token，来请求用户信息");
+        }
+        User user = userdao.selectById(userId);
+        user.setPassword(null);
+        return new Result(Status.SUCCESS,user);
     }
 }
 

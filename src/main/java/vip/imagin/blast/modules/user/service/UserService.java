@@ -39,5 +39,7 @@ public interface UserService extends IService<User> {
     Result getCaptch();
 
     Map<String, Object> searchface(StringBuilder img);
+
+    Result getUserInfo(String token);
 }
 
